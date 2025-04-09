@@ -4,16 +4,17 @@ using namespace std;
 class Node {
 public:
     int subtreeSize;
-    Node* child, *sibling;
+    Node *child, *sibling;
+
     Node() : subtreeSize(0), child(nullptr), sibling(nullptr) {}
 };
 
-void treeFromInput(Node** tree, int n) {
+void treeFromInput(Node **tree, int n) {
     for (int i = 0; i < n; i++) tree[i] = new Node();
     for (int i = 1; i < n; i++) {
         int parent;
         cin >> parent;
-        parent--;
+        parent--; // converting to 0-based
         if (tree[parent]->child != nullptr)
             tree[i]->sibling = tree[parent]->child;
         tree[parent]->child = tree[i];
@@ -22,7 +23,7 @@ void treeFromInput(Node** tree, int n) {
 
 void calcSubtreeSizes(Node* node) {
     node->subtreeSize = 1;
-    for (Node* c = node->child; c != nullptr; c = c->sibling) {
+    for (Node *c = node->child; c != nullptr; c = c->sibling) {
         calcSubtreeSizes(c);
         node->subtreeSize += c->subtreeSize;
     }
