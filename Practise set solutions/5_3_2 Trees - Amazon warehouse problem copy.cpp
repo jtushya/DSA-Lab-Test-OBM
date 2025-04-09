@@ -24,7 +24,7 @@ void treeFromInput(Node** tree, int n) {
         tree[parent]->child = tree[i];
     }
 }
-
+//codefill1
 void calcSubtreeSizes(Node* node) {
     node->subtreeSize = 1;
     for (Node* c = node->child; c != nullptr; c = c->sibling) {
@@ -32,6 +32,8 @@ void calcSubtreeSizes(Node* node) {
         node->subtreeSize += c->subtreeSize;
     }
 }
+
+//codefill2
 
 // Calculate total delivery cost from the root node
 int calcTotalDist(Node* node, int depth = 0) {
@@ -42,6 +44,7 @@ int calcTotalDist(Node* node, int depth = 0) {
     return total;
 }
 
+//codefill3 - task2 creation - recursive function to calculate total delivery cost
 // Rerooting DP: calculate total delivery cost for all nodes
 void reroot(Node* node, int totalDist) {
     // Update minimum delivery cost
