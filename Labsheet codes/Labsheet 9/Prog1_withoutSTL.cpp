@@ -1,18 +1,72 @@
 #include <iostream>
-#include "linked_binary_tree.h"
-
 using namespace std;
+
+// Node structure for the binary tree
+struct Node
+{
+    int data;
+    Node *left, *right, *par;
+
+    Node(int val) : data(val), left(NULL), right(NULL), par(NULL) {}
+};
+
+// BinaryTree class to manage tree operations
+class BinaryTree
+{
+public:
+    Node *createTree(int arr[], int size, Node *par, Node *root, int i)
+    {
+        if (i < size && arr[i] != -1)
+        {
+            root = new Node(arr[i]);
+            root->par = par;
+
+            root->left = createTree(arr, size, root, root->left, 2 * i + 1);
+            root->right = createTree(arr, size, root, root->right, 2 * i + 2);
+        }
+        return root;
+    }
+
+    void inorder(Node *root)
+    {
+        if (root == NULL)
+            return;
+        inorder(root->left);
+        cout << root->data << ' ';
+        inorder(root->right);
+    }
+
+    void postorder(Node *root)
+    {
+        if (root == NULL)
+            return;
+        postorder(root->left);
+        postorder(root->right);
+        cout << root->data << ' ';
+    }
+
+    Node *getReferenceOf(Node *root, int val)
+    {
+        if (root == NULL)
+            return NULL;
+        if (root->data == val)
+            return root;
+
+        Node *leftSearch = getReferenceOf(root->left, val);
+        if (leftSearch != NULL)
+            return leftSearch;
+
+        return getReferenceOf(root->right, val);
+    }
+};
 
 // Appends the subtree rooted at [root] as the right-most child of the subtree rooted at [newRoot].
 void append(Node *root, Node *newRoot)
 {
-    // Find the right-most child of the subtree rooted at [newRoot].
     Node *rightMostChild = newRoot;
-
     while (rightMostChild->right != NULL)
         rightMostChild = rightMostChild->right;
 
-    // Update pointers to append the subtree.
     rightMostChild->right = root;
     root->par = rightMostChild;
 }
@@ -20,11 +74,9 @@ void append(Node *root, Node *newRoot)
 // Detaches the subtree rooted at [newRoot] from the tree rooted at [root].
 void fix(Node *root, Node *newRoot)
 {
-    // Base case: If the root is NULL, do nothing.
     if (root == NULL)
         return;
 
-    // If [newRoot] is the left child, detach it.
     if (root->left == newRoot)
     {
         root->left = NULL;
@@ -32,7 +84,6 @@ void fix(Node *root, Node *newRoot)
         return;
     }
 
-    // If [newRoot] is the right child, detach it.
     if (root->right == newRoot)
     {
         root->right = NULL;
@@ -40,7 +91,6 @@ void fix(Node *root, Node *newRoot)
         return;
     }
 
-    // Recursively search in the left and right subtrees.
     fix(root->left, newRoot);
     fix(root->right, newRoot);
 }
@@ -48,14 +98,10 @@ void fix(Node *root, Node *newRoot)
 // Re-roots the tree by making [newRoot] the new root of the tree.
 void reRoot(Node *root, Node *newRoot)
 {
-    // If the current root is already the new root, do nothing.
     if (root == newRoot)
         return;
 
-    // Step 1: Detach the subtree rooted at [newRoot].
     fix(root, newRoot);
-
-    // Step 2: Append the original tree as the right-most child of [newRoot].
     append(root, newRoot);
 }
 
@@ -63,11 +109,12 @@ int main()
 {
     BinaryTree tree;
 
-    // Create a binary tree from a vector of integers.
-    vector<int> v = {5, 7, 9, 3, -1, 11, 15, -1, -1, -1, -1, 12, 14};
-    Node *root = tree.createTree(v, NULL, NULL, 0);
+    // Static array for tree creation
+    int arr[] = {5, 7, 9, 3, -1, 11, 15, -1, -1, -1, -1, 12, 14};
+    int size = sizeof(arr) / sizeof(arr[0]);
 
-    // Display the initial tree in inorder and postorder traversals.
+    Node *root = tree.createTree(arr, size, NULL, NULL, 0);
+
     cout << "Initial Tree:-" << endl;
     cout << "Inorder:";
     tree.inorder(root);
@@ -79,27 +126,21 @@ int main()
     Node *newRoot = NULL;
     int n;
 
-    // Prompt the user to enter the value of the new root.
     while (true)
     {
         cout << "\nEnter the new root of the tree: ";
         cin >> n;
 
-        // Get the reference to the node with the entered value.
-        newRoot = tree.getReferenceOf(n);
+        newRoot = tree.getReferenceOf(root, n);
 
-        // If the node exists, break the loop.
         if (newRoot != NULL)
             break;
 
-        // Otherwise, prompt the user to enter a valid value.
         cout << "Enter valid input.\n";
     }
 
-    // Perform the re-root operation.
     reRoot(root, newRoot);
 
-    // Display the tree after the re-root operation in inorder and postorder traversals.
     cout << "\nAfter Re-Root operation:-" << endl;
     cout << "Inorder:";
     tree.inorder(newRoot);

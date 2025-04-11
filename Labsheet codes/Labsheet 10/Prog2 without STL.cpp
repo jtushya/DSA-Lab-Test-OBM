@@ -50,7 +50,7 @@ public:
 
 void MinHeap::buildMinHeap()
 {
-    for (int i = (heapSize >> 1) - 1; i >= 0; i--)
+    for (int i = (heapSize / 2) - 1; i >= 0; i--) // Changed >> to /
         bubbleDown(i);
 }
 
@@ -105,7 +105,7 @@ void MinHeap::bubbleUp(int index)
 {
     while (index > 0)
     {
-        int parent = (index - 1) >> 1;
+        int parent = (index - 1) / 2; // Calculate parent index
         if (heap[index] < heap[parent])
         {
             swap(index, parent);
@@ -119,8 +119,8 @@ void MinHeap::bubbleDown(int index)
 {
     while (true)
     {
-        int left = (index << 1) + 1;
-        int right = (index << 1) + 2;
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
         int smallest = index;
 
         if (left < heapSize && heap[left] < heap[smallest])
