@@ -6,7 +6,7 @@ using namespace std;
 class MinHeap
 {
 private:
-vector<int> heap;
+    vector<int> heap;
     int heapSize;
     int heapCapacity;
     void buildMinHeap();
@@ -85,6 +85,7 @@ int MinHeap::getMin() const
     return heap.at(0);
 }
 
+// Task 1: Complete extractMin() method
 // Extracts and returns the minimum item from the heap.
 // Time Complexity = O(log n)
 int MinHeap::extractMin()
@@ -92,10 +93,20 @@ int MinHeap::extractMin()
     if (empty())
         throw "Heap is Empty!";
 
-    // Grab the minimum item
+    // Grab the minimum item at the root
     int item = heap.at(0);
 
-    // add missing code...
+    // Move the last element to the root
+    heap.at(0) = heap.at(heapSize - 1);
+
+    // Remove the last element (as it's now duplicated at root)
+    heap.pop_back();
+
+    // Decrease the heap size
+    --heapSize;
+
+    // Perform heapify (bubble down) to restore heap property
+    bubbleDown(0);
 
     return item;
 }
@@ -153,15 +164,38 @@ void MinHeap::bubbleUp(int index)
     }
 }
 
+// Task 2: Implement bubbleDown() method
 // Bubble-Down operation
 // Move a node downwards until the heap invariant is satisfied.
 // Time Complexity = O(log n)
 void MinHeap::bubbleDown(int index)
 {
-    if (index < 0 || index > heapSize)
+    if (index < 0 || index >= heapSize)
         throw "Invalid index.";
 
-    // complete the code...
+    while (true)
+    {
+        // Calculate indices of left and right children
+        int left = (index << 1) + 1;
+        int right = (index << 1) + 2;
+        int smallest = index;
+
+        // If left child exists and is smaller than current smallest
+        if (left < heapSize && heap[left] < heap[smallest])
+            smallest = left;
+
+        // If right child exists and is smaller than current smallest
+        if (right < heapSize && heap[right] < heap[smallest])
+            smallest = right;
+
+        // If the current index holds the smallest value, stop
+        if (smallest == index)
+            break;
+
+        // Otherwise, swap and continue bubbling down
+        swap(index, smallest);
+        index = smallest;
+    }
 }
 
 // Utility method to swap elements at given indices.
