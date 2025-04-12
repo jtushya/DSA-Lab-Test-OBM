@@ -1,3 +1,14 @@
+/*
+Problem:
+This program implements a re-rooting operation on a binary tree. It allows the user to select a new root for the tree and rearranges the tree structure accordingly.
+
+Intuition and Logic:
+1. The re-rooting operation involves detaching the subtree rooted at the new root and appending the original tree as a child of the new root.
+2. The program uses recursive functions to detach the subtree and append the original tree.
+3. The tree is displayed in inorder and postorder traversals before and after the re-rooting operation.
+4. This demonstrates the flexibility of tree structures and the use of recursion for tree manipulations.
+*/
+
 #include <iostream>
 #include "linked_binary_tree.h"
 

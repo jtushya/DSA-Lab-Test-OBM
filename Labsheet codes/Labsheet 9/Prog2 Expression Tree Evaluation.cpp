@@ -1,3 +1,15 @@
+/*
+Problem:
+This program evaluates mathematical expressions represented as binary expression trees. It supports basic arithmetic operations and displays the expression in infix notation.
+
+Intuition and Logic:
+1. The expression tree is constructed from a parenthesized input string using a recursive function.
+2. Each node in the tree represents either an operator or an operand.
+3. The program uses inorder traversal to display the expression in infix notation.
+4. Postorder traversal is used to evaluate the expression by recursively computing the values of subtrees.
+5. This demonstrates the use of trees for representing and evaluating mathematical expressions.
+*/
+
 #include <iostream>
 
 using namespace std;

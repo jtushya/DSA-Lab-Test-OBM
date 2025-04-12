@@ -1,3 +1,31 @@
+/*
+Problem:
+This program implements a circular queue using a circularly linked list. A circular queue is a data structure that connects the last node back to the first node, allowing efficient use of memory. The program provides basic queue operations such as enqueue, dequeue, and display.
+
+Intuition and Logic:
+1. **Circular Queue**:
+   - A circular queue overcomes the limitations of a linear queue by reusing empty spaces created by dequeued elements.
+   - The program uses a circularly linked list to manage the queue elements, where the last node points back to the first node.
+
+2. **Queue Operations**:
+   - **Enqueue**: Adds an element to the rear of the queue by inserting it after the cursor.
+   - **Dequeue**: Removes an element from the front of the queue by deleting the node after the cursor.
+   - **Display**: Traverses the circular linked list to display all elements in the queue.
+
+3. **Utility Functions**:
+   - The program provides utility functions to check if the queue is empty and to get the size of the queue.
+   - These functions help manage the queue efficiently and ensure its correctness.
+
+4. **Example**:
+   - Input: Enqueue "A", "B", "C"; Dequeue; Display.
+   - Output: "B C" (after dequeuing "A").
+
+5. **Applications**:
+   - Circular queues are widely used in scenarios where memory efficiency and continuous data processing are important, such as buffering and scheduling.
+
+This program demonstrates the use of linked lists for implementing circular data structures and provides insights into their advantages and applications.
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -83,13 +111,16 @@ void CircleList::remove()
 
 void CircleList::traverse()
 {
-    CNode *temp = cursor->next;
-    while (temp != cursor)
+    if (cursor == NULL) // If the list is empty
+        return;
+
+    CNode *temp = cursor->next; // Start from the node after the cursor
+    while (temp != cursor)      // Traverse until we reach the cursor again
     {
         cout << temp->elem << " ";
         temp = temp->next;
     }
-    cout << temp->elem;
+    cout << temp->elem; // Print the cursor element
     cout << endl;
 }
 
@@ -145,7 +176,26 @@ void LinkedQueue::dequeue()
 
 void LinkedQueue::display()
 {
-    C.traverse();
+    if (empty())
+    {
+        cout << "Queue is Empty!" << endl;
+        return;
+    }
+
+    CNode *temp = C.cursor->next; // Start from the node after the cursor
+    while (temp != C.cursor)      // Traverse until we reach the cursor again
+    {
+        if (temp->next == C.cursor) // If the next node is the cursor
+        {
+            cout << temp->elem; // Print the last element without a trailing space
+        }
+        else
+        {
+            cout << temp->elem << " "; // Print the element with a trailing space
+        }
+        temp = temp->next;
+    }
+    cout << endl;
 }
 
 void printOptions()

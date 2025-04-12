@@ -1,3 +1,37 @@
+/*
+Problem:
+This program implements basic binary tree operations, including insertion and traversal (preorder, inorder, and postorder). A binary tree is a hierarchical data structure where each node has at most two children. The program demonstrates the use of recursion for tree traversal and manipulation.
+
+Intuition and Logic:
+1. **Binary Tree**:
+   - A binary tree consists of nodes, each containing data and pointers to its left and right children.
+   - The program provides methods to insert elements into the tree and perform recursive traversals.
+
+2. **Tree Traversals**:
+   - **Preorder**: Visits the root, left subtree, and right subtree.
+   - **Inorder**: Visits the left subtree, root, and right subtree.
+   - **Postorder**: Visits the left subtree, right subtree, and root.
+
+3. **Recursion**:
+   - The program uses recursive functions to traverse the tree, leveraging the hierarchical structure of the binary tree.
+   - Each traversal function calls itself for the left and right subtrees, processing the root node as needed.
+
+4. **Efficiency**:
+   - Recursive traversal is intuitive and aligns with the structure of the binary tree, making it easy to implement and understand.
+
+5. **Example**:
+   - Input: Tree = [10, 20, 30] (in level order).
+   - Output:
+     - Preorder: 10, 20, 30.
+     - Inorder: 20, 10, 30.
+     - Postorder: 20, 30, 10.
+
+6. **Applications**:
+   - Tree traversals are fundamental operations used in various applications, such as expression evaluation, searching, and hierarchical data processing.
+
+This program highlights the power of recursion for tree traversal and provides insights into the structure and behavior of binary trees.
+*/
+
 #include <iostream>
 
 using namespace std;

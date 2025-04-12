@@ -59,5 +59,48 @@ const E &ArrayStack<E>::top()
 // returns true if the given character is a bracket, false o.w.
 bool isBracket(char c)
 {
-    return c == '(' || c == ')' ;
+    return c == '(' || c == ')' || c == '{' || c == '}' || c == '[' || c == ']'; // Added support for {} and []
+}
+
+// returns true if the brackets match, false o.w.
+bool isMatchingPair(char open, char close)
+{
+    return (open == '(' && close == ')') ||
+           (open == '{' && close == '}') ||
+           (open == '[' && close == ']'); // Added matching logic for {} and []
+}
+
+bool isBalanced(const string &expression)
+{
+    ArrayStack<char> stack;
+
+    for (char c : expression)
+    {
+        if (c == '(' || c == '{' || c == '[') // Push opening brackets onto the stack
+        {
+            stack.push(c);
+        }
+        else if (c == ')' || c == '}' || c == ']') // Check closing brackets
+        {
+            if (stack.empty() || !isMatchingPair(stack.top(), c))
+                return false; // Unmatched closing bracket or mismatched pair
+            stack.pop();
+        }
+    }
+
+    return stack.empty(); // If stack is empty, all brackets are balanced
+}
+
+int main()
+{
+    string expression;
+    cout << "Enter an expression: ";
+    cin >> expression;
+
+    if (isBalanced(expression))
+        cout << "The expression has balanced brackets.\n";
+    else
+        cout << "The expression does not have balanced brackets.\n";
+
+    return 0;
 }

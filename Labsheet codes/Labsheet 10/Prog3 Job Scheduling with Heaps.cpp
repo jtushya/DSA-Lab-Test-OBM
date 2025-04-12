@@ -1,4 +1,21 @@
-//can create an alternate version where I can have machines as nodes in the heap and jobs in array
+/*
+Problem:
+This program implements two scheduling algorithms: Longest Job First (LJF) and Shortest Job First (SJF). It compares the total completion time of all jobs when scheduled using these algorithms.
+
+Intuition and Logic:
+1. Longest Job First (LJF):
+   - Jobs with the longest CPU times are scheduled first.
+   - A max-heap is used to efficiently retrieve the longest job.
+   - This approach may lead to higher total completion time due to idle CPUs waiting for long jobs to finish.
+
+2. Shortest Job First (SJF):
+   - Jobs with the shortest CPU times are scheduled first.
+   - A min-heap is used to efficiently retrieve the shortest job.
+   - This approach minimizes the total completion time by reducing idle CPU time.
+
+3. The program dynamically allocates jobs to CPUs and tracks their completion times.
+4. The difference in completion times between LJF and SJF highlights the impact of scheduling strategies on system performance.
+*/
 
 // Note: An alternate implementation can be created where machines are nodes in the heap
 // and jobs are stored in an array. This would allow dynamic allocation of jobs to machines

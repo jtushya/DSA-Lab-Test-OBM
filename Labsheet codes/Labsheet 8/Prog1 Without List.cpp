@@ -18,7 +18,7 @@ int main()
     {
         int mark;
         cin >> mark;
-        //missing code A;
+        marks.push_back(mark); // Missing code A: Add mark to the list
     }
 
     // create an instance of list iterator
@@ -27,20 +27,26 @@ int main()
     // Using Iterator, Display marks
     cout << "Input Marks: ";
     for (itr = marks.begin(); itr != marks.end(); itr++)
-        cout << //missing code B << " ";
+        cout << *itr << " "; // Missing code B: Dereference iterator to get value
     cout << endl;
 
     // Using Iterator, Check whether the mark is even or odd using iterator
-    // Pl complete the code here...
+    for (itr = marks.begin(); itr != marks.end(); itr++)
+    {
+        if (*itr % 2 == 0)
+            cout << *itr << " = Even" << endl;
+        else
+            cout << *itr << " = Odd" << endl;
+    }
 
-    // Using Iterator,  update the marks by 10
-    for (itr = marks.begin(); // missing code D ; itr++)
+    // Using Iterator, update the marks by 10
+    for (itr = marks.begin(); itr != marks.end(); itr++) // Missing code D: Initialize iterator
         *itr = *itr + 10;
 
     cout << "Updated Marks: ";
     // Using Iterator, Display updated marks
     for (itr = marks.begin(); itr != marks.end(); itr++)
-        cout << //missing code E << " ";
+        cout << *itr << " "; // Missing code E: Dereference iterator to get value
     cout << endl;
 
     return 0;

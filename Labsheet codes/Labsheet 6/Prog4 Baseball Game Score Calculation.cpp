@@ -57,38 +57,42 @@ const E &ArrayStack<E>::top()
     return S[t];
 }
 
-int giveScore(string ops){
-    ArrayStack<char> charStack;
+int giveScore(string ops) {
+    ArrayStack<int> charStack; // Changed to store integers instead of characters
     int sum = 0;
 
-    for (int i=0; i < ops.length(); i++) {
+    for (int i = 0; i < ops.length(); i++) {
         cout << ops[i] << endl;
-        if (ops[i] == '+'){
-                int first = charStack.top();
-                charStack.pop();
-                int second = charStack.top();
-                charStack.push(first);
-                charStack.push(first + second);
-                sum += first + second;
-        } else if (ops[i] == 'D'){
-                sum += 2 * charStack.top();
-                charStack.push(2 * charStack.top());
-        } else if (//fill code here){
-                //fill code here
+
+        if (ops[i] == '+') {
+            // Add the top two elements
+            int first = charStack.top();
+            charStack.pop();
+            int second = charStack.top();
+            charStack.push(first); // Push back the first element
+            charStack.push(first + second); // Push their sum
+            sum += first + second;
+        } else if (ops[i] == 'D') {
+            // Double the top element
+            sum += 2 * charStack.top();
+            charStack.push(2 * charStack.top());
+        } else if (ops[i] == 'C') {
+            // Remove the last score
+            sum -= charStack.top();
+            charStack.pop();
         } else {
-                sum += int(ops[i])-48;
-                charStack.push(int(ops[i])-48);
+            // Push the numeric value onto the stack
+            sum += int(ops[i]) - 48; // Convert character to integer
+            charStack.push(int(ops[i]) - 48);
         }
     }
     return sum;
 }
 
-int main()
-{
-    //given the string operations
+int main() {
+    // Given the string operations
     string ops = "524CD9++";
     cout << giveScore(ops);
 
     return 0;
-
 }

@@ -1,30 +1,4 @@
-/*
-Logic and Intuition:
-1. **Euler Tour**:
-   - Euler Tour is a traversal technique that records the sequence of nodes visited during a Depth First Search (DFS).
-   - Each node is visited twice (once when entering and once when exiting), except the root, which is visited once.
-   - This traversal helps in efficiently solving problems like Lowest Common Ancestor (LCA) and subtree size.
-
-2. **Lowest Common Ancestor (LCA)**:
-   - The LCA of two nodes `u` and `v` is the deepest node that is an ancestor of both `u` and `v`.
-   - Using Euler Tour, the LCA can be found by identifying the range of indices in the Euler Tour corresponding to the first occurrences of `u` and `v`.
-   - The node with the minimum depth (level) in this range is the LCA.
-
-3. **Subtree Size (Dependents)**:
-   - The size of the subtree rooted at a node `x` can be determined by counting the occurrences of `x` in the Euler Tour.
-   - Each node in the subtree contributes two occurrences in the Euler Tour (entering and exiting), except the root of the subtree, which contributes one.
-
-4. **Efficient Querying**:
-   - The `firstOccurrence` array allows quick access to the first index of any node in the Euler Tour.
-   - The `level` array stores the depth of each node in the Euler Tour, enabling efficient computation of the LCA.
-
-Tasks:
-- Implement `findLCA` to compute the LCA of two nodes using the `firstOccurrence` and `level` arrays.
-- Implement `findDependents` to compute the subtree size of a node using the Euler Tour.
-*/
-
 #include <iostream>
-#include <vector>
 #include <climits>
 using namespace std;
 
@@ -39,37 +13,67 @@ struct TreeNode {
 // EulerTour class to perform Euler Tour and answer queries
 class EulerTour {
 private:
-    vector<int> euler; // Stores the Euler Tour sequence
-    vector<int> level; // Stores the level of each node in the Euler Tour
-    vector<int> firstOccurrence; // Stores the first occurrence of each node in the Euler Tour
+    int* euler; // Stores the Euler Tour sequence
+    int* level; // Stores the level of each node in the Euler Tour
+    int* firstOccurrence; // Stores the first occurrence of each node in the Euler Tour
+    int eulerSize; // Size of the euler array
+    int capacity; // Capacity of the dynamic arrays
 
-    // Helper function to perform Euler Tour
+    // Helper function to resize dynamic arrays
+    void resizeArrays() {
+        capacity *= 2;
+        int* newEuler = new int[capacity];
+        int* newLevel = new int[capacity];
+        for (int i = 0; i < eulerSize; i++) {
+            newEuler[i] = euler[i];
+            newLevel[i] = level[i];
+        }
+        delete[] euler;
+        delete[] level;
+        euler = newEuler;
+        level = newLevel;
+    }
+
+    // This function performs an Euler Tour traversal of the binary tree.
+    // It populates the euler, level, and firstOccurrence arrays.
+    // Parameters:
+    // - node: The current node being visited.
+    // - depth: The depth of the current node in the tree.
+    // - index: The current index in the Euler Tour sequence.
     void tour(TreeNode* node, int depth, int& index) {
-        if (!node) return;
+        if (!node) return; // Base case: If the node is null, return.
 
-        // Record first occurrence of the node
+        // Record the first occurrence of the node in the Euler Tour.
         if (firstOccurrence[node->val] == -1) {
             firstOccurrence[node->val] = index;
         }
 
-        // Add node to Euler and Level arrays
-        euler.push_back(node->val);
-        level.push_back(depth);
+        // Add the current node to the Euler and Level arrays.
+        if (eulerSize == capacity) resizeArrays(); // Resize arrays if full.
+        euler[eulerSize] = node->val;
+        level[eulerSize] = depth;
+        eulerSize++;
         index++;
 
-        // Recur for left subtree
+        // Recur for the left subtree.
         tour(node->left, depth + 1, index);
         if (node->left) {
-            euler.push_back(node->val);
-            level.push_back(depth);
+            // Add the current node again after visiting the left subtree.
+            if (eulerSize == capacity) resizeArrays();
+            euler[eulerSize] = node->val;
+            level[eulerSize] = depth;
+            eulerSize++;
             index++;
         }
 
-        // Recur for right subtree
+        // Recur for the right subtree.
         tour(node->right, depth + 1, index);
         if (node->right) {
-            euler.push_back(node->val);
-            level.push_back(depth);
+            // Add the current node again after visiting the right subtree.
+            if (eulerSize == capacity) resizeArrays();
+            euler[eulerSize] = node->val;
+            level[eulerSize] = depth;
+            eulerSize++;
             index++;
         }
     }
@@ -77,10 +81,23 @@ private:
 public:
     // Constructor to initialize Euler Tour
     EulerTour(TreeNode* root, int maxNodeValue) {
-        // Initialize firstOccurrence with -1 (indicating no occurrence yet)
-        firstOccurrence.resize(maxNodeValue + 1, -1);
+        capacity = 100; // Initial capacity
+        euler = new int[capacity];
+        level = new int[capacity];
+        firstOccurrence = new int[maxNodeValue + 1];
+        for (int i = 0; i <= maxNodeValue; i++) {
+            firstOccurrence[i] = -1;
+        }
+        // eulerSize = 0;
         int index = 0;
         tour(root, 0, index);
+    }
+
+    // Destructor to free memory
+    ~EulerTour() {
+        delete[] euler;
+        delete[] level;
+        delete[] firstOccurrence;
     }
 
     // Function to find LCA of two nodes
@@ -109,8 +126,8 @@ public:
     int findDependents(int x) {
         // Count the number of occurrences of x in the Euler array
         int count = 0;
-        for (int val : euler) {
-            if (val == x) count++;
+        for (int i = 0; i < eulerSize; i++) {
+            if (euler[i] == x) count++;
         }
 
         // Subtree size = (number of occurrences + 1) / 2

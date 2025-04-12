@@ -1,3 +1,34 @@
+/*
+Problem:
+This program implements the Bubble Sort algorithm on a doubly linked list. Bubble Sort is a simple sorting algorithm that repeatedly compares adjacent elements and swaps them if they are in the wrong order. The program sorts the elements of the list in ascending order.
+
+Intuition and Logic:
+1. **Doubly Linked List**:
+   - A doubly linked list allows traversal in both directions, making it suitable for implementing sorting algorithms.
+   - The program uses a doubly linked list to store the elements and provides methods for appending, displaying, and sorting the list.
+
+2. **Bubble Sort**:
+   - Bubble Sort works by repeatedly iterating through the list and swapping adjacent elements if they are in the wrong order.
+   - The algorithm continues until no swaps are needed, indicating that the list is sorted.
+
+3. **Implementation**:
+   - The program uses a `bubbleSort` function to iterate through the list and perform swaps as needed.
+   - It tracks the last sorted node to optimize the sorting process and reduce unnecessary comparisons.
+
+4. **Efficiency**:
+   - Bubble Sort has a time complexity of O(n^2) in the worst case, making it suitable for small datasets.
+   - The use of a doubly linked list provides flexibility and dynamic memory management.
+
+5. **Example**:
+   - Input: List = [30, 20, 10].
+   - Output: Sorted List = [10, 20, 30].
+
+6. **Applications**:
+   - Bubble Sort is often used as an educational tool to introduce sorting algorithms and their concepts.
+
+This program demonstrates the use of doubly linked lists for implementing sorting algorithms and highlights the trade-offs between simplicity and efficiency.
+*/
+
 /* Bubble Sort in a Doubly Linked List */
 
 #include <iostream>
@@ -116,53 +147,73 @@ void list::sort()
 // Worst Case = Big-Oh(n^2)
 void list::bubbleSort()
 {
-    // Complete the code here...
+    if (isEmpty())
+        return;
+
+    bool swapped = true;
+    node *lastSorted = NULL; // Tracks the last sorted node
+
+    while (swapped) // Continue until no swaps are made
+    {
+        swapped = false;
+        node *current = head;
+
+        while (current->getNext() != lastSorted)
+        {
+            if (current->getData() > current->getNext()->getData())
+            {
+                // Swap the two adjacent nodes
+                swap(current, current->getNext());
+                swapped = true;
+            }
+            else
+            {
+                current = current->getNext(); // Move to the next node
+            }
+        }
+
+        // Update the last sorted node
+        lastSorted = current;
+    }
 }
 
 // utility method to swap the two adjacent nodes of the list
 void list::swap(node *a, node *b)
 {
-    if (a->getPrev() == b)
+    if (a->getNext() != b)
     {
-        swap(a, b);
+        // Ensure a and b are adjacent; if not, return
+        return;
     }
-    // fix the head pointer
-    if (head == a || head == b)
+
+    // Fix the head pointer
+    if (head == a)
     {
-        if (head == a)
-        {
-            head = b;
-        }
-        else
-        {
-            head = a;
-        }
+        head = b;
     }
-    // fix the tail pointer
-    if (tail == a || tail == b)
+
+    // Fix the tail pointer
+    if (tail == b)
     {
-       //Missing code D (multiple lines)
+        tail = a;
     }
-    // update [a]'s next pointer
+
+    // Update pointers for swapping
     a->setNext(b->getNext());
-    // update [b]'s next pointer
-      
-       // missing code E (one line) 
-    
-    // update the prev pointer of [a]'s new next node
+    b->setPrev(a->getPrev());
+
     if (a->getNext() != NULL)
     {
         a->getNext()->setPrev(a);
     }
-    // update [b]'s prev pointer
-    b->setPrev(a->getPrev());
-    // update [a]'s prev pointer
-    a->setPrev(b);
-    // update the next pointer of [b]'s new prev node
+
     if (b->getPrev() != NULL)
     {
         b->getPrev()->setNext(b);
     }
+
+    b->setNext(a);
+    a->setPrev(b);
 }
 
 // utility method to display the list contents
